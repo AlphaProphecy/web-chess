@@ -1,3 +1,5 @@
+use std::cmp::{max, min};
+
 use crate::board::{Board, Vector};
 
 #[derive(PartialEq, Eq, Debug, Clone, Copy)]
@@ -6,20 +8,21 @@ pub enum Color {
     Black,
 }
 
-// impl Color {
-//     pub fn direction(&self) -> i32 {
-//         match self {
-//             Color::White => 1,
-//             Color::Black => -1,
-//         }
-//     }
-// }
+impl Color {
+    pub fn direction(&self) -> i32 {
+        match self {
+            Color::White => 1,
+            Color::Black => -1,
+        }
+    }
+}
 
 pub trait PieceLogic {
     fn get_moves(&self, board: &Board, position: Vector) -> Vec<Vector>;
-    fn record_move(&mut self, inital: Vector, final_: Vector);
+    fn record_move(&mut self, initial: Vector, final_: Vector);
 }
 
+#[derive(Debug)]
 pub struct Knight {
     pub color: Color,
 }
@@ -45,9 +48,10 @@ impl PieceLogic for Knight {
         vector_movement(board, self.color, position, sets, Some(1))
     }
 
-    fn record_move(&mut self, _inital: Vector, _final_: Vector) {}
+    fn record_move(&mut self, _initial: Vector, _final: Vector) {}
 }
 
+#[derive(Debug)]
 pub struct Bishop {
     pub color: Color,
 }
@@ -64,16 +68,21 @@ impl PieceLogic for Bishop {
         vector_movement(board, self.color, position, sets, None)
     }
 
-    fn record_move(&mut self, _inital: Vector, _final_: Vector) {}
+    fn record_move(&mut self, _initial: Vector, _final: Vector) {}
 }
 
+#[derive(Debug)]
 pub struct Rook {
     pub color: Color,
+    pub has_moved: bool,
 }
 
 impl Rook {
     pub fn new(color: Color) -> Rook {
-        Rook { color }
+        Rook {
+            color,
+            has_moved: false,
+        }
     }
 }
 
@@ -83,9 +92,12 @@ impl PieceLogic for Rook {
         vector_movement(board, self.color, position, sets, None)
     }
 
-    fn record_move(&mut self, _inital: Vector, _final_: Vector) {}
+    fn record_move(&mut self, _initial: Vector, _final: Vector) {
+        self.has_moved = true;
+    }
 }
 
+#[derive(Debug)]
 pub struct Queen {
     pub color: Color,
 }
@@ -111,9 +123,10 @@ impl PieceLogic for Queen {
         vector_movement(board, self.color, position, sets, None)
     }
 
-    fn record_move(&mut self, _inital: Vector, _final_: Vector) {}
+    fn record_move(&mut self, _initial: Vector, _final: Vector) {}
 }
 
+#[derive(Debug)]
 pub struct King {
     pub color: Color,
     pub has_moved: bool,
@@ -140,14 +153,47 @@ impl PieceLogic for King {
             (-1, -1),
             (1, -1),
         ];
-        vector_movement(board, self.color, position, sets, Some(1))
+        let mut moves = vector_movement(board, self.color, position, sets, Some(1));
+
+        if self.has_moved {
+            return moves;
+        }
+
+        let starts = [(0, position.1), (7, position.1)];
+        for (x, y) in starts.iter() {
+            let rook = match board.get((*x, *y)) {
+                Some(Piece::Rook(rook)) => rook,
+                _ => continue,
+            };
+
+            if rook.color != self.color || rook.has_moved {
+                continue;
+            }
+
+            let mut blocked = false;
+            let start = min(*x, position.0) + 1;
+            let end = max(*x, position.0);
+            for x in start..end {
+                if board.get((x, position.1)).is_some() {
+                    blocked = true;
+                    break;
+                }
+                // TODO: Check for check
+            }
+            if !blocked {
+                moves.push((position.0 + (2 * ((*x - position.0).signum())), position.1));
+            }
+        }
+
+        moves
     }
 
-    fn record_move(&mut self, _inital: Vector, _final_: Vector) {
+    fn record_move(&mut self, _initial: Vector, _final: Vector) {
         self.has_moved = true;
     }
 }
 
+#[derive(Debug)]
 pub struct Pawn {
     pub color: Color,
     pub has_moved: bool,
@@ -166,23 +212,41 @@ impl Pawn {
 
 impl PieceLogic for Pawn {
     fn get_moves(&self, board: &Board, position: Vector) -> Vec<Vector> {
-        let sets = vec![(0, 1)];
+        let dir = self.color.direction();
+        let sets = vec![(0, dir)];
         let limit = match self.has_moved {
             true => Some(1),
             false => Some(2),
         };
         let mut moves = vector_movement(board, self.color, position, sets, limit);
+
+        let y = position.1 + dir;
+        if y < 0 || y > 7 {
+            return moves;
+        }
+
+        let sets = [(1, dir), (-1, dir)];
+        for (x, y) in sets {
+            let (x, y) = (position.0 + x, position.1 + y);
+            if let Some(piece) = board.get((x, y)) {
+                if piece.color() != self.color {
+                    moves.push((x, y));
+                }
+            }
+        }
+
         moves
     }
 
-    fn record_move(&mut self, _inital: Vector, _final_: Vector) {
+    fn record_move(&mut self, _initial: Vector, _final: Vector) {
         self.has_moved = true;
-        if (_inital.1 - _final_.1).abs() == 2 {
+        if (_initial.1 - _final.1).abs() == 2 {
             self.did_double_move = true;
         }
     }
 }
 
+#[derive(Debug)]
 pub enum Piece {
     Knight(Knight),
     Bishop(Bishop),
@@ -219,6 +283,17 @@ impl Piece {
         match self {
             Piece::King(_) => true,
             _ => false,
+        }
+    }
+
+    pub fn to_logic(&self) -> &dyn PieceLogic {
+        match self {
+            Piece::Knight(knight) => knight,
+            Piece::Bishop(bishop) => bishop,
+            Piece::Rook(rook) => rook,
+            Piece::Queen(queen) => queen,
+            Piece::King(king) => king,
+            Piece::Pawn(pawn) => pawn,
         }
     }
 }
