@@ -1,7 +1,5 @@
 mod board;
-mod piece;
-
-use piece::{Bishop, Color, King, Knight, Pawn, Piece, PieceLogic, Queen, Rook};
+mod pieces;
 
 fn main() {
     let board = board::Board::new();

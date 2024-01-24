@@ -1,11 +1,11 @@
-use crate::piece::Bishop;
-use crate::piece::Color;
-use crate::piece::King;
-use crate::piece::Knight;
-use crate::piece::Pawn;
-use crate::piece::Piece;
-use crate::piece::Queen;
-use crate::piece::Rook;
+use crate::pieces::bishop::Bishop;
+use crate::pieces::king::King;
+use crate::pieces::knight::Knight;
+use crate::pieces::pawn::Pawn;
+use crate::pieces::queen::Queen;
+use crate::pieces::rook::Rook;
+use crate::pieces::Color;
+use crate::pieces::Piece;
 
 pub type Vector = (i32, i32);
 
