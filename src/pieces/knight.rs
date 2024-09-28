@@ -12,19 +12,20 @@ impl Knight {
     }
 }
 
+const KNIGHT_SETS: [(i32, i32); 8] = [
+    (1, 2),
+    (2, 1),
+    (-1, 2),
+    (-2, 1),
+    (-1, -2),
+    (-2, -1),
+    (1, -2),
+    (2, -1),
+];
+
 impl PieceLogic for Knight {
     fn get_moves(&self, board: &Board, position: Vector) -> Vec<Vector> {
-        let sets = vec![
-            (1, 2),
-            (2, 1),
-            (-1, 2),
-            (-2, 1),
-            (-1, -2),
-            (-2, -1),
-            (1, -2),
-            (2, -1),
-        ];
-        vector_movement(board, self.color, position, sets, Some(1))
+        vector_movement(board, self.color, position, &KNIGHT_SETS, Some(1))
     }
 
     fn record_move(&mut self, _initial: Vector, _final: Vector) {}

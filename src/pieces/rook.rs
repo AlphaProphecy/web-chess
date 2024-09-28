@@ -16,10 +16,11 @@ impl Rook {
     }
 }
 
+const ROOK_SETS: [(i32, i32); 4] = [(1, 0), (0, 1), (-1, 0), (0, -1)];
+
 impl PieceLogic for Rook {
     fn get_moves(&self, board: &Board, position: Vector) -> Vec<Vector> {
-        let sets = vec![(1, 0), (0, 1), (-1, 0), (0, -1)];
-        vector_movement(board, self.color, position, sets, None)
+        vector_movement(board, self.color, position, &ROOK_SETS, None)
     }
 
     fn record_move(&mut self, _initial: Vector, _final: Vector) {

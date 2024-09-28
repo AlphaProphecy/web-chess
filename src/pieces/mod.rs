@@ -38,16 +38,16 @@ pub enum Piece {
 }
 
 impl Piece {
-    // pub fn display(&self) -> String {
-    //     match self {
-    //         Piece::Knight(_) => "N".to_string(),
-    //         Piece::Bishop(_) => "B".to_string(),
-    //         Piece::Rook(_) => "R".to_string(),
-    //         Piece::Queen(_) => "Q".to_string(),
-    //         Piece::King(_) => "K".to_string(),
-    //         Piece::Pawn(_) => "P".to_string(),
-    //     }
-    // }
+    pub fn display(&self) -> String {
+        match self {
+            Piece::Knight(_) => "N".to_string(),
+            Piece::Bishop(_) => "B".to_string(),
+            Piece::Rook(_) => "R".to_string(),
+            Piece::Queen(_) => "Q".to_string(),
+            Piece::King(_) => "K".to_string(),
+            Piece::Pawn(_) => "P".to_string(),
+        }
+    }
 
     pub fn color(&self) -> Color {
         match self {
@@ -83,7 +83,7 @@ pub fn vector_movement(
     board: &Board,
     color: Color,
     position: Vector,
-    directions: Vec<Vector>,
+    directions: &[Vector],
     limit: Option<i32>,
 ) -> Vec<Vector> {
     let limit = limit.unwrap_or(7);

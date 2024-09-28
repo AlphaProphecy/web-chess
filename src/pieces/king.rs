@@ -17,19 +17,20 @@ impl King {
     }
 }
 
+const KING_SETS: [(i32, i32); 8] = [
+    (1, 0),
+    (0, 1),
+    (-1, 0),
+    (0, -1),
+    (1, 1),
+    (-1, 1),
+    (-1, -1),
+    (1, -1),
+];
+
 impl PieceLogic for King {
     fn get_moves(&self, board: &Board, position: Vector) -> Vec<Vector> {
-        let sets = vec![
-            (1, 0),
-            (0, 1),
-            (-1, 0),
-            (0, -1),
-            (1, 1),
-            (-1, 1),
-            (-1, -1),
-            (1, -1),
-        ];
-        let mut moves = vector_movement(board, self.color, position, sets, Some(1));
+        let mut moves = vector_movement(board, self.color, position, &KING_SETS, Some(1));
 
         if self.has_moved {
             return moves;

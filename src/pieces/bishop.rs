@@ -12,10 +12,11 @@ impl Bishop {
     }
 }
 
+const BISHOP_SETS: [(i32, i32); 4] = [(1, 1), (-1, 1), (-1, -1), (1, -1)];
+
 impl PieceLogic for Bishop {
     fn get_moves(&self, board: &Board, position: Vector) -> Vec<Vector> {
-        let sets = vec![(1, 1), (-1, 1), (-1, -1), (1, -1)];
-        vector_movement(board, self.color, position, sets, None)
+        vector_movement(board, self.color, position, &BISHOP_SETS, None)
     }
 
     fn record_move(&mut self, _initial: Vector, _final: Vector) {}

@@ -21,12 +21,12 @@ impl Pawn {
 impl PieceLogic for Pawn {
     fn get_moves(&self, board: &Board, position: Vector) -> Vec<Vector> {
         let dir = self.color.direction();
-        let sets = vec![(0, dir)];
+        let sets = [(0, dir)];
         let limit = match self.has_moved {
             true => Some(1),
             false => Some(2),
         };
-        let mut moves = vector_movement(board, self.color, position, sets, limit);
+        let mut moves = vector_movement(board, self.color, position, &sets, limit);
 
         let y = position.1 + dir;
         if y < 0 || y > 7 {

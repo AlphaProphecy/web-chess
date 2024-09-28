@@ -15,52 +15,8 @@ pub struct Board {
 
 impl Board {
     pub fn new() -> Board {
-        let fill_empty = |_| None;
         Board {
             state: [
-                [
-                    Some(Piece::Rook(Rook::new(Color::Black))),
-                    Some(Piece::Knight(Knight::new(Color::Black))),
-                    Some(Piece::Bishop(Bishop::new(Color::Black))),
-                    Some(Piece::Queen(Queen::new(Color::Black))),
-                    Some(Piece::King(King::new(Color::Black))),
-                    Some(Piece::Bishop(Bishop::new(Color::Black))),
-                    Some(Piece::Knight(Knight::new(Color::Black))),
-                    Some(Piece::Rook(Rook::new(Color::Black))),
-                ],
-                [
-                    Some(Piece::Pawn(Pawn::new(Color::Black))),
-                    Some(Piece::Pawn(Pawn::new(Color::Black))),
-                    Some(Piece::Pawn(Pawn::new(Color::Black))),
-                    Some(Piece::Pawn(Pawn::new(Color::Black))),
-                    Some(Piece::Pawn(Pawn::new(Color::Black))),
-                    Some(Piece::Pawn(Pawn::new(Color::Black))),
-                    Some(Piece::Pawn(Pawn::new(Color::Black))),
-                    Some(Piece::Pawn(Pawn::new(Color::Black))),
-                ],
-                [(); 8].map(fill_empty),
-                [
-                    Some(Piece::Rook(Rook::new(Color::Black))),
-                    None,
-                    None,
-                    None,
-                    Some(Piece::King(King::new(Color::Black))),
-                    None,
-                    None,
-                    Some(Piece::Rook(Rook::new(Color::Black))),
-                ],
-                [(); 8].map(fill_empty),
-                [(); 8].map(fill_empty),
-                [
-                    Some(Piece::Pawn(Pawn::new(Color::White))),
-                    Some(Piece::Pawn(Pawn::new(Color::White))),
-                    Some(Piece::Pawn(Pawn::new(Color::White))),
-                    Some(Piece::Pawn(Pawn::new(Color::White))),
-                    Some(Piece::Pawn(Pawn::new(Color::White))),
-                    Some(Piece::Pawn(Pawn::new(Color::White))),
-                    Some(Piece::Pawn(Pawn::new(Color::White))),
-                    Some(Piece::Pawn(Pawn::new(Color::White))),
-                ],
                 [
                     Some(Piece::Rook(Rook::new(Color::White))),
                     Some(Piece::Knight(Knight::new(Color::White))),
@@ -71,6 +27,40 @@ impl Board {
                     Some(Piece::Knight(Knight::new(Color::White))),
                     Some(Piece::Rook(Rook::new(Color::White))),
                 ],
+                [
+                    Some(Piece::Pawn(Pawn::new(Color::White))),
+                    Some(Piece::Pawn(Pawn::new(Color::White))),
+                    Some(Piece::Pawn(Pawn::new(Color::White))),
+                    Some(Piece::Pawn(Pawn::new(Color::White))),
+                    Some(Piece::Pawn(Pawn::new(Color::White))),
+                    Some(Piece::Pawn(Pawn::new(Color::White))),
+                    Some(Piece::Pawn(Pawn::new(Color::White))),
+                    Some(Piece::Pawn(Pawn::new(Color::White))),
+                ],
+                [None, None, None, None, None, None, None, None],
+                [None, None, None, None, None, None, None, None],
+                [None, None, None, None, None, None, None, None],
+                [None, None, None, None, None, None, None, None],
+                [
+                    Some(Piece::Pawn(Pawn::new(Color::Black))),
+                    Some(Piece::Pawn(Pawn::new(Color::Black))),
+                    Some(Piece::Pawn(Pawn::new(Color::Black))),
+                    Some(Piece::Pawn(Pawn::new(Color::Black))),
+                    Some(Piece::Pawn(Pawn::new(Color::Black))),
+                    Some(Piece::Pawn(Pawn::new(Color::Black))),
+                    Some(Piece::Pawn(Pawn::new(Color::Black))),
+                    Some(Piece::Pawn(Pawn::new(Color::Black))),
+                ],
+                [
+                    Some(Piece::Rook(Rook::new(Color::Black))),
+                    Some(Piece::Knight(Knight::new(Color::Black))),
+                    Some(Piece::Bishop(Bishop::new(Color::Black))),
+                    Some(Piece::Queen(Queen::new(Color::Black))),
+                    Some(Piece::King(King::new(Color::Black))),
+                    Some(Piece::Bishop(Bishop::new(Color::Black))),
+                    Some(Piece::Knight(Knight::new(Color::Black))),
+                    Some(Piece::Rook(Rook::new(Color::Black))),
+                ],
             ],
         }
     }
@@ -80,15 +70,15 @@ impl Board {
         self.state[y as usize][x as usize].as_ref()
     }
 
-    // pub fn display(&self) {
-    //     for row in self.state.iter() {
-    //         for piece in row.iter() {
-    //             match piece {
-    //                 Some(piece) => print!("{} ", piece.display()),
-    //                 None => print!(". "),
-    //             }
-    //         }
-    //         println!();
-    //     }
-    // }
+    pub fn display(&self) {
+        for row in self.state.iter() {
+            for piece in row.iter() {
+                match piece {
+                    Some(piece) => print!("{} ", piece.display()),
+                    None => print!(". "),
+                }
+            }
+            println!();
+        }
+    }
 }

@@ -12,19 +12,20 @@ impl Queen {
     }
 }
 
+const QUEEN_SETS: [(i32, i32); 8] = [
+    (1, 0),
+    (0, 1),
+    (-1, 0),
+    (0, -1),
+    (1, 1),
+    (-1, 1),
+    (-1, -1),
+    (1, -1),
+];
+
 impl PieceLogic for Queen {
     fn get_moves(&self, board: &Board, position: Vector) -> Vec<Vector> {
-        let sets = vec![
-            (1, 0),
-            (0, 1),
-            (-1, 0),
-            (0, -1),
-            (1, 1),
-            (-1, 1),
-            (-1, -1),
-            (1, -1),
-        ];
-        vector_movement(board, self.color, position, sets, None)
+        vector_movement(board, self.color, position, &QUEEN_SETS, None)
     }
 
     fn record_move(&mut self, _initial: Vector, _final: Vector) {}
