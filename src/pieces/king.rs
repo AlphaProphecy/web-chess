@@ -55,7 +55,6 @@ impl PieceLogic for King {
                     blocked = true;
                     break;
                 }
-                // TODO: Check for check
             }
             if !blocked {
                 moves.push((position.0 + (2 * ((*x - position.0).signum())), position.1));

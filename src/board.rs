@@ -9,8 +9,12 @@ use crate::pieces::Piece;
 
 pub type Vector = (i32, i32);
 
+pub const BOARD_HEIGHT: usize = 8;
+pub const BOARD_WIDTH: usize = 8;
+pub const IS_SQUARE: bool = BOARD_HEIGHT == BOARD_WIDTH;
+
 pub struct Board {
-    state: [[Option<Piece>; 8]; 8],
+    state: [[Option<Piece>; BOARD_WIDTH]; BOARD_HEIGHT],
 }
 
 impl Board {
